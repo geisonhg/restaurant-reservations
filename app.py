@@ -2,29 +2,31 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Lista de reservas (simulación de base de datos)
+# Data
 reservations = []
+current_id = 1
 
-# Ruta para crear una reserva
+# Create a booking
 @app.route("/reservations", methods=["POST"])
 def create_reservation():
-    data = request.get_json()
+    global current_id
     new_reservation = {
-        "id": len(reservations) + 1,
-        "name": data["name"],
-        "date": data["date"],
-        "time": data["time"],
-        "guests": data["guests"]
+        "id": current_id,
+        "name": request.json["name"],
+        "date": request.json["date"],
+        "time": request.json["time"],
+        "table": request.json["table"],
     }
     reservations.append(new_reservation)
-    return jsonify(new_reservation), 201
+    current_id += 1
+    return jsonify(new_reservation)
 
-# Ruta para ver todas las reservas
+# Get all bookings
 @app.route("/reservations", methods=["GET"])
 def get_reservations():
     return jsonify(reservations)
 
-# Ruta para eliminar una reserva
+# Delete a booking
 @app.route("/reservations/<int:reservation_id>", methods=["DELETE"])
 def delete_reservation(reservation_id):
     global reservations
@@ -33,6 +35,3 @@ def delete_reservation(reservation_id):
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-    
-
