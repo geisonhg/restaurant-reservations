@@ -87,12 +87,18 @@ async function deleteReservation(id) {
 reservationForm.addEventListener('submit', (event) => {
     event.preventDefault(); // Prevent page reload
 
-    const newReservation = {
-        name: reservationForm.name.value,
-        date: reservationForm.date.value,
-        time: reservationForm.time.value,
-        table: reservationForm.table.value
-    };
+    const name = reservationForm.name.value.trim();
+    const date = reservationForm.date.value;
+    const time = reservationForm.time.value;
+    const table = reservationForm.table.value;
+
+    if (!name || !date || !time || !table) {
+        showMessage("Please fill out all fields.", "error");
+        return;
+    }
+
+    const newReservation = { name, date, time, table };
+
 
     createReservation(newReservation);
     reservationForm.reset(); // optional
