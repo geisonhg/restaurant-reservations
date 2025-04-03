@@ -108,3 +108,32 @@ table tr:last-child td {
 .deleteBtn:hover {
   background-color: #c82333;
 }
+
+#messageBox {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s ease;
+  z-index: 9999;
+}
+
+#messageBox.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#messageBox.success {
+  background-color: #28a745;
+}
+
+#messageBox.error {
+  background-color: #dc3545;
+}

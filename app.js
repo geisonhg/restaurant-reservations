@@ -51,7 +51,7 @@ async function createReservation(newReservation) {
         if (!response.ok) {
             const errorData = await response.json();
             console.error('Server returned an error:', errorData.error);
-            alert(errorData.error); // Show an alert or handle it in the UI
+            showMessage(errorData.error, "error"); // Show an alert or handle it in the UI
             return;
         }
 
@@ -60,6 +60,8 @@ async function createReservation(newReservation) {
 
         // Append the new reservation to the bottom of the table
         addReservationRow(created);
+        showMessage("Reservation created successfully! 🎉", "success");
+
     } catch (error) {
         console.error('Error creating reservation:', error);
     }
@@ -103,6 +105,17 @@ reservationsTbody.addEventListener('click', (event) => {
         deleteReservation(id);
     }
 });
+
+function showMessage(message, type = "success") {
+    const box = document.getElementById("messageBox");
+    box.textContent = message;
+    box.className = `show ${type}`;
+
+    setTimeout(() => {
+        box.className = "hidden";
+    }, 3000);
+}
+
 
 // On page load, fetch the existing reservations
 loadReservations();
