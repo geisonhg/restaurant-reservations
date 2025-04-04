@@ -123,6 +123,26 @@ document.getElementById('searchInput').addEventListener('input', function () {
       }
     });
   });
+
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    const rows = reservationsTbody.querySelectorAll('tr');
+    let csvContent = 'ID,Name,Date,Time,Table\\n';
+  
+    rows.forEach(row => {
+      if (row.style.display !== 'none') {
+        const cols = row.querySelectorAll('td');
+        const rowData = Array.from(cols).map(td => td.textContent);
+        csvContent += rowData.join(',') + '\\n';
+      }
+    });
+  
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'reservations.csv');
+    link.click();
+  });
   
 
 loadReservations();
