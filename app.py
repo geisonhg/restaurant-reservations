@@ -53,7 +53,7 @@ def delete_reservation(reservation_id):
 # ✅ Serve frontend files
 @app.route("/")
 def serve_index():
-    return send_from_directory(".", "index.html")
+    return send_from_directory(".", "Index.html")
 
 @app.route("/<path:path>")
 def serve_static(path):
