@@ -19,27 +19,38 @@ function addReservationRow(reservation) {
     reservationsTbody.appendChild(row);
 }
 
+function showMessage(message, isError = false) {
+    const box = document.getElementById('messageBox');
+    box.textContent = message;
+    box.classList.remove('hidden');
+    box.className = isError ? 'toast error' : 'toast success';
+
+    setTimeout(() => {
+        box.classList.add('fade-out');
+        setTimeout(() => box.classList.add('hidden'), 500);
+    }, 3000);
+}
+
 // Load all reservations from the server (GET)
 async function loadReservations() {
     try {
-        const response = await fetch('http://localhost:5000/reservations');
+        const response = await fetch('/reservations');
         const data = await response.json();
 
-        // Clear the table before re-filling it
         reservationsTbody.innerHTML = '';
-
         data.forEach(reservation => {
             addReservationRow(reservation);
         });
     } catch (error) {
         console.error('Error loading reservations:', error);
+        showMessage("Could not load reservations. Server error.", true);
     }
 }
 
 // Create a new reservation (POST)
 async function createReservation(newReservation) {
     try {
-        const response = await fetch('http://localhost:5000/reservations', {
+        const response = await fetch('/reservations', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -47,64 +58,51 @@ async function createReservation(newReservation) {
             body: JSON.stringify(newReservation)
         });
 
-        // If the response is not OK (e.g., status 400), handle the error
         if (!response.ok) {
             const errorData = await response.json();
-            console.error('Server returned an error:', errorData.error);
-            showMessage(errorData.error, "error"); // Show an alert or handle it in the UI
+            showMessage(errorData.error || "Reservation failed.", true);
             return;
         }
 
         const created = await response.json();
-        console.log('Reservation created:', created);
-
-        // Append the new reservation to the bottom of the table
         addReservationRow(created);
-        showMessage("Reservation created successfully! 🎉", "success");
+        showMessage("Reservation created successfully!");
 
     } catch (error) {
         console.error('Error creating reservation:', error);
+        showMessage("Failed to create reservation.", true);
     }
 }
 
 // Delete a reservation (DELETE)
 async function deleteReservation(id) {
     try {
-        const response = await fetch(`http://localhost:5000/reservations/${id}`, {
+        const response = await fetch(`/reservations/${id}`, {
             method: 'DELETE'
         });
         const data = await response.json();
-        console.log(data);
-
-        // Reload the table to keep it in sync
+        showMessage("Reservation deleted.");
         loadReservations();
     } catch (error) {
         console.error('Error deleting reservation:', error);
+        showMessage("Failed to delete reservation.", true);
     }
 }
 
-// Handle the form submission to create a reservation
 reservationForm.addEventListener('submit', (event) => {
-    event.preventDefault(); // Prevent page reload
+    event.preventDefault();
 
-    const name = reservationForm.name.value.trim();
-    const date = reservationForm.date.value;
-    const time = reservationForm.time.value;
-    const table = reservationForm.table.value;
-
-    if (!name || !date || !time || !table) {
-        showMessage("Please fill out all fields.", "error");
-        return;
-    }
-
-    const newReservation = { name, date, time, table };
-
+    const newReservation = {
+        name: reservationForm.name.value,
+        date: reservationForm.date.value,
+        time: reservationForm.time.value,
+        table: reservationForm.table.value
+    };
 
     createReservation(newReservation);
-    reservationForm.reset(); // optional
+    reservationForm.reset();
 });
 
-// Listen for clicks on any Delete button
 reservationsTbody.addEventListener('click', (event) => {
     if (event.target.classList.contains('deleteBtn')) {
         const id = event.target.getAttribute('data-id');
@@ -112,16 +110,4 @@ reservationsTbody.addEventListener('click', (event) => {
     }
 });
 
-function showMessage(message, type = "success") {
-    const box = document.getElementById("messageBox");
-    box.textContent = message;
-    box.className = `show ${type}`;
-
-    setTimeout(() => {
-        box.className = "hidden";
-    }, 3000);
-}
-
-
-// On page load, fetch the existing reservations
 loadReservations();
