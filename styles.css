@@ -200,3 +200,17 @@ select:invalid {
 .toast.fade-out {
   opacity: 0;
 }
+
+.search-bar {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.search-bar input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 50%;
+  max-width: 400px;
+  font-size: 1rem;
+}

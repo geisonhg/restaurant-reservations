@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Reservation System</title>
   <!-- Google Font (optional) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link 
-    href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" 
-    rel="stylesheet"
-  >
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Link to external CSS -->
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
   <div class="container">
     <h1>Reservation System</h1>
+
+    <div class="search-bar">
+      <label for="search">Search reservations:</label>
+      <input type="text" id="searchInput" placeholder="Type a name, date, or table...">
+    </div>
+
 
     <!-- Form to create a new reservation -->
     <form id="reservationForm">
@@ -83,9 +88,11 @@
   </div>
 
   <!-- Link to external JavaScript file -->
-  <script src="app.js"></script>
-  
+  <script src="app.js" defer></script>
+
+  <!-- Message box (hidden initially) -->
   <div id="messageBox" class="hidden"></div>
 
 </body>
+
 </html>

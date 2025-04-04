@@ -110,4 +110,19 @@ reservationsTbody.addEventListener('click', (event) => {
     }
 });
 
+document.getElementById('searchInput').addEventListener('input', function () {
+    const searchValue = this.value.toLowerCase();
+    const rows = reservationsTbody.querySelectorAll('tr');
+  
+    rows.forEach(row => {
+      const rowText = row.textContent.toLowerCase();
+      if (rowText.includes(searchValue)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+  
+
 loadReservations();
